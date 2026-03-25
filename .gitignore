@@ -1,0 +1,12 @@
+**/.vscode/
+
+# Ignore node_modules folders everywhere
+**/node_modules/
+
+# Ignore .venv folders everywhere
+**/.venv/
+
+# Additional common Python and Node.js ignores
+*.pyc
+__pycache__/
+.env
