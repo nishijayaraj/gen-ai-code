@@ -1,0 +1,17 @@
+{
+  "name": "web-mcp-ollamma",
+  "version": "1.0.0",
+  "description": "MVP for connecting web application to mcp",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "ai": "^6.0.116",
+    "ollama-ai-provider": "^1.2.0"
+  }
+}

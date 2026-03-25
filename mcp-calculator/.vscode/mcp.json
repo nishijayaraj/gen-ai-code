@@ -1,0 +1,13 @@
+{
+  "servers": {
+    "calculator": {
+      "type": "command",
+      "command": "/home/hp/Documents/gen-ai-samples/mcp-calculator/dev-env/bin/python",
+      "args": [
+        "/home/hp/Documents/gen-ai-samples/mcp-calculator/calculator.py"
+      ],
+      "env": {}
+    }
+  },
+  "inputs": []
+}

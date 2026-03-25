@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Run MCP Calculator (stdio)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/calculator.py",
+      "console": "integratedTerminal",
+      "args": ["--transport", "stdio"]
+    },
+    {
+      "name": "Python: List MCP Tools",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/calculator.py",
+      "console": "integratedTerminal",
+      "args": ["--list-tools"]
+    }
+  ]
+}

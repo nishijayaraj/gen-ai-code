@@ -1,0 +1,30 @@
+{
+  "$schema": "./node_modules/json-server/schema.json",
+  "reports": [
+    {
+      "id": "1",
+      "priority": "high",
+      "title": "DB outage in PROD",
+      "description": "A DB outage in PROD"
+    },
+    {
+      "id": "2",
+      "priority": "medium",
+      "title": "Log failure",
+      "description": "A log failure in PROD"
+    },
+    {
+      "id": "3",
+      "priority": "high",
+      "title": "Exception",
+      "description": "EXception occured in PROD"
+    }
+  ],
+  "comments": [
+    { "id": "1", "text": "a comment about post 1", "postId": "1" },
+    { "id": "2", "text": "another comment about post 1", "postId": "1" }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}

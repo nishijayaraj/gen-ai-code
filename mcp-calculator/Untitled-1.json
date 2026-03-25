@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Debug calculator.py",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/calculator.py",
+      "console": "integratedTerminal",
+      "env": {}
+    }
+  ]
+}

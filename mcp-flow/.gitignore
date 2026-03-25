@@ -1,0 +1,18 @@
+# Ignore the project virtual environment
+dev-env/
+
+# Ignore common hidden folders used by editors, caches and envs
+
+.env/
+.venv/
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Ignore other hidden directories, but keep git metadata and this .gitignore file tracked
+.*
+!.git/
+!.gitignore
+!.github/
+!.vscode/
