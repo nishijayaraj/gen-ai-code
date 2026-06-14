@@ -1,0 +1,307 @@
+openapi: 3.0.3
+info:
+  title: Ecommerce Microservices API
+  version: 1.0.0
+  description: |
+    Generated OpenAPI 3.0 documentation for the ecommerce microservices application.
+    This specification is based on source code analysis and reflects all verifiable REST endpoints,
+    request/response schemas, and API gateway security requirements.
+servers:
+  - url: http://localhost:8765
+    description: API Gateway entrypoint
+tags:
+  - name: product-service
+    description: Product management endpoints
+  - name: order-service
+    description: Order placement endpoints
+  - name: inventory-service
+    description: Inventory availability endpoints
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ProductDTO:
+      type: object
+      required:
+        - name
+        - description
+        - price
+      properties:
+        name:
+          type: string
+          example: iPhone 15 Pro
+        description:
+          type: string
+          example: Apple iPhone 15 Pro with 256GB storage
+        price:
+          type: number
+          format: double
+          example: 1199.99
+    OrderLineItemsDTO:
+      type: object
+      required:
+        - skuCode
+        - price
+        - quantity
+      properties:
+        skuCode:
+          type: string
+          example: iphone-15-pro
+        price:
+          type: number
+          format: double
+          example: 1199.99
+        quantity:
+          type: integer
+          example: 1
+    OrderRequest:
+      type: object
+      required:
+        - orderLineItems
+      properties:
+        orderLineItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderLineItemsDTO"
+    InventoryResponse:
+      type: object
+      required:
+        - skuCode
+        - isInStock
+      properties:
+        skuCode:
+          type: string
+          example: iphone-15-pro
+        isInStock:
+          type: boolean
+          example: true
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-05-10T12:34:56Z"
+        status:
+          type: integer
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Product with id 123 not found
+        path:
+          type: string
+          example: /api/v1/products/123
+paths:
+  /api/v1/products:
+    get:
+      tags:
+        - product-service
+      summary: Retrieve all products
+      description: Returns the full list of products from the product service.
+      operationId: getProducts
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Array of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProductDTO"
+        "500":
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      tags:
+        - product-service
+      summary: Create a new product
+      description: Adds a new product record to the product store.
+      operationId: createProduct
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductDTO"
+            example:
+              name: AirPods Pro
+              description: Wireless noise-cancelling earbuds
+              price: 249.99
+      responses:
+        "201":
+          description: Product created successfully
+        "500":
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/products/{productId}:
+    parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Unique product identifier
+    get:
+      tags:
+        - product-service
+      summary: Retrieve a single product by ID
+      operationId: getProductById
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDTO"
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      tags:
+        - product-service
+      summary: Update an existing product
+      description: Updates the product identified by productId with new values.
+      operationId: updateProduct
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductDTO"
+      responses:
+        "200":
+          description: Updated product details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductDTO"
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags:
+        - product-service
+      summary: Delete a product
+      description: Deletes the product identified by productId.
+      operationId: deleteProduct
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Product deleted successfully
+        "500":
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/order:
+    post:
+      tags:
+        - order-service
+      summary: Place an order
+      description: Places a new order and validates product availability through the inventory service.
+      operationId: placeOrder
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderRequest"
+            example:
+              orderLineItems:
+                - skuCode: iphone-15-pro
+                  price: 1199.99
+                  quantity: 1
+      responses:
+        "201":
+          description: Order placed successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Order placed successfully.
+        "500":
+          description: Unexpected server error or inventory validation failure
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/inventory:
+    get:
+      tags:
+        - inventory-service
+      summary: Check inventory availability
+      description: Returns stock availability for one or more SKU codes.
+      operationId: queryInventory
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: skuCode
+          in: query
+          required: true
+          explode: true
+          style: form
+          description: SKU code(s) to query for availability. Repeat parameter for multiple values.
+          schema:
+            type: array
+            items:
+              type: string
+              example: iphone-15-pro
+      responses:
+        "200":
+          description: Inventory availability results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InventoryResponse"
+        "500":
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+security:
+  - bearerAuth: []
